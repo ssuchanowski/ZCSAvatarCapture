@@ -220,32 +220,44 @@
 }
 
 - (IBAction)swapCameras:(id)sender {
-	if (self.isCapturingImage != YES) {
-		if (self.captureDevice == [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo][0]) {
-			// rear active, switch to front
-			self.captureDevice = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo][1];
-
-			[self.captureSession beginConfiguration];
-			AVCaptureDeviceInput *newInput = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
-			for (AVCaptureInput *oldInput in self.captureSession.inputs) {
-				[self.captureSession removeInput:oldInput];
-			}
-			[self.captureSession addInput:newInput];
-			[self.captureSession commitConfiguration];
-		} else if (self.captureDevice == [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo][1]) {
-			// front active, switch to rear
-			self.captureDevice = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo][0];
-			[self.captureSession beginConfiguration];
-			AVCaptureDeviceInput *newInput = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
-			for (AVCaptureInput *oldInput in self.captureSession.inputs) {
-				[self.captureSession removeInput:oldInput];
-			}
-            
-            if (newInput) {
-                [self.captureSession addInput:newInput];
-                [self.captureSession commitConfiguration];
+    if (self.isCapturingImage != YES) {
+        NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+        if (devices.count == 0) {
+            return;
+        }
+        
+        if (devices.count > 1) {
+            if ([self.captureDevice isEqual:devices[0]]) {
+                // rear active, switch to front
+                self.captureDevice = devices[1];
+                [self.captureSession beginConfiguration];
+                
+                for (AVCaptureInput *oldInput in self.captureSession.inputs) {
+                    [self.captureSession removeInput:oldInput];
+                }
+                
+                AVCaptureDeviceInput *newInput = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
+                if (newInput) {
+                    [self.captureSession addInput:newInput];
+                    [self.captureSession commitConfiguration];
+                }
+                
+            } else if (self.captureDevice == devices[1]) {
+                // front active, switch to rear
+                self.captureDevice = devices[0];
+                [self.captureSession beginConfiguration];
+                
+                for (AVCaptureInput *oldInput in self.captureSession.inputs) {
+                    [self.captureSession removeInput:oldInput];
+                }
+                
+                AVCaptureDeviceInput *newInput = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
+                if (newInput) {
+                    [self.captureSession addInput:newInput];
+                    [self.captureSession commitConfiguration];
+                }
             }
-		}
+        }
 
 		// Need to reset flash btn
 	}
