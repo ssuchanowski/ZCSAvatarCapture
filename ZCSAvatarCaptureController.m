@@ -240,8 +240,11 @@
 			for (AVCaptureInput *oldInput in self.captureSession.inputs) {
 				[self.captureSession removeInput:oldInput];
 			}
-			[self.captureSession addInput:newInput];
-			[self.captureSession commitConfiguration];
+            
+            if (newInput) {
+                [self.captureSession addInput:newInput];
+                [self.captureSession commitConfiguration];
+            }
 		}
 
 		// Need to reset flash btn
