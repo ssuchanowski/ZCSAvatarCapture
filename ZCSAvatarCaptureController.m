@@ -104,7 +104,7 @@
             [self.captureSession addInput:input];
             
             self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-            NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys:AVVideoCodecJPEG, AVVideoCodecKey, nil];
+            NSDictionary *outputSettings = @{AVVideoCodecKey : AVVideoCodecJPEG};
             [self.stillImageOutput setOutputSettings:outputSettings];
             [self.captureSession addOutput:self.stillImageOutput];
             
@@ -220,7 +220,7 @@
 }
 
 - (IBAction)swapCameras:(id)sender {
-    if (self.isCapturingImage != YES) {
+    if (!self.isCapturingImage) {
         NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
         if (devices.count == 0) {
             return;
@@ -297,7 +297,7 @@
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-	self.selectedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    self.selectedImage = info[UIImagePickerControllerOriginalImage];
 
 	[self dismissViewControllerAnimated:YES
 				   completion:^{
