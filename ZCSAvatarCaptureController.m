@@ -239,8 +239,9 @@
                 AVCaptureDeviceInput *newInput = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
                 if (newInput) {
                     [self.captureSession addInput:newInput];
-                    [self.captureSession commitConfiguration];
                 }
+
+                [self.captureSession commitConfiguration];
                 
             } else if (self.captureDevice == devices[1]) {
                 // front active, switch to rear
@@ -254,8 +255,9 @@
                 AVCaptureDeviceInput *newInput = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
                 if (newInput) {
                     [self.captureSession addInput:newInput];
-                    [self.captureSession commitConfiguration];
                 }
+
+                [self.captureSession commitConfiguration];
             }
         }
 
