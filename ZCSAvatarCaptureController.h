@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Zane Shannon. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @class ZCSAvatarCaptureController;
 
