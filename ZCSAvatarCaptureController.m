@@ -178,7 +178,12 @@
 
 - (IBAction)capturePhoto:(id)sender {
     self.isCapturingImage = YES;
-    bool isFrontFacing = self.captureDevice == [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo][1];
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    if (!self.captureDevice || devices.count < 2) {
+        return;
+    }
+
+    bool isFrontFacing = self.captureDevice == devices[1];
     AVCaptureConnection *videoConnection = nil;
     for (AVCaptureConnection *connection in _stillImageOutput.connections) {
         for (AVCaptureInputPort *port in [connection inputPorts]) {
